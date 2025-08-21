@@ -3,6 +3,7 @@ import { fetchCommunities, type Community } from "./CommunityList";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 interface PostInput {
   title: string;
@@ -37,6 +38,7 @@ export const CreatePost = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [communityId, setCommunityId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -51,6 +53,9 @@ export const CreatePost = () => {
     mutationFn: (data: { post: PostInput; imageFile: File }) => {
       return createPost(data.post, data.imageFile);
     },
+    onSuccess: ()=>{
+      navigate("/");
+    }
   });
 
   const handleSubmit = (event: React.FormEvent) => {
